@@ -1,46 +1,15 @@
 "use client"
 
-import {AiOutlinePlus} from 'react-icons/ai'
-import Modal from './Modal';
-import { FormEventHandler, useState } from 'react';
-import { addTodo } from '@/api';
-import { useRouter } from 'next/navigation';
-import { v4 as uuidv4 } from 'uuid';
+import Link from 'next/link';
 
 const AddTask = () => {
-    const router = useRouter();
-    const [modalOpen, setModalOpen] = useState<boolean>(false);
-    const [newTaskValue, setNewTaskValue] = useState<string>("");
-    const handleSubmitNewTodo : FormEventHandler<HTMLFormElement> = async (e) => {
-        e.preventDefault();
-        await addTodo({id: uuidv4(), text: newTaskValue});
-        setNewTaskValue("");
-        setModalOpen(false);
-        router.refresh();
-    }
     return (
         <div>
-            <button onClick={()=>setModalOpen(true)} className="btn btn-primary w-full">
-                ADD NEW TASK
-            <AiOutlinePlus className='ml-2' size={18}></AiOutlinePlus>
-            </button>
-            <Modal modalOpen={modalOpen} setModalOpen={setModalOpen}>
-                <form onSubmit={handleSubmitNewTodo}>
-                    <h3 className='text-lg font-bold'>
-                        Add new task
-                    </h3>
-                    <div className='modal-action'>
-                        <input 
-                        type="text" 
-                        onChange={(e)=>setNewTaskValue(e.target.value)} 
-                        value={newTaskValue}
-                        placeholder='Type here' 
-                        className='input input-bordered w-full' 
-                        />
-                        <button type='submit' className='btn'>Submit</button>
-                    </div>
-                </form>
-            </Modal>
+            <Link href="/add-task">
+                <button className="btn btn-primary w-full">
+                    ADD NEW TASK
+                </button>
+            </Link>
         </div>
     )
 }
