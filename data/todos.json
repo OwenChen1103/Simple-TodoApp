@@ -1,0 +1,12 @@
+{
+  "tasks": [
+    {
+      "id": "8a4c5d01-c8b1-4cb7-b125-c645e2f2bdde",
+      "text": "First todo"
+    },
+    {
+      "id": "5e54b775-2678-49e3-b116-9bcd8846840a",
+      "text": "Third todo"
+    }
+  ]
+}
