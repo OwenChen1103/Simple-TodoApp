@@ -1,14 +1,15 @@
 "use client"
 
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 const AddTask = () => {
     return (
         <div>
             <Link href="/add-task">
-                <button className="btn btn-primary w-full">
+                <Button className="w-full">
                     ADD NEW TASK
-                </button>
+                </Button>
             </Link>
         </div>
     )
