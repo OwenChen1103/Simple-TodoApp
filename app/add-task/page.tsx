@@ -4,6 +4,8 @@ import { useState, FormEventHandler } from "react";
 import { useRouter } from "next/navigation";
 import { addTodo } from "@/api";
 import { v4 as uuidv4 } from "uuid";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 const AddTaskPage = () => {
   const router = useRouter();
@@ -19,16 +21,16 @@ const AddTaskPage = () => {
     <main className="max-w-4xl mx-auto mt-4">
       <h1 className="text-2xl font-bold mb-4">Add New Task</h1>
       <form onSubmit={handleSubmit}>
-        <input
+        <Input
           type="text"
           value={newTaskValue}
           onChange={(e) => setNewTaskValue(e.target.value)}
           placeholder="Type here"
-          className="input input-bordered w-full mb-4"
+          className="mb-4"
         />
-        <button type="submit" className="btn btn-primary">
+        <Button type="submit">
           Save
-        </button>
+        </Button>
       </form>
     </main>
   );
