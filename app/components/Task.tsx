@@ -43,7 +43,7 @@ const Task: React.FC<TaskProps> = ({ task }) => {
                     <h3 className='text-lg font-bold'>
                        Edit task
                     </h3>
-                    <div className='modal-action'>
+                    <div className='flex flex-col gap-4 mt-4'>
                         <Input 
                         value={taskToEdit}
                         onChange={(e)=>setTaskToEdit(e.target.value)} 
@@ -58,7 +58,7 @@ const Task: React.FC<TaskProps> = ({ task }) => {
                 <h3 className='text-lg font-bold'>
                     Are you sure, you want to delete this task?
                 </h3>
-                <div className='modal-action'>
+                <div className='flex justify-end mt-4'>
                     <Button onClick={() => handleDeleteTask(task.id)} variant="destructive">Delete</Button>
                 </div>
             </Modal>
