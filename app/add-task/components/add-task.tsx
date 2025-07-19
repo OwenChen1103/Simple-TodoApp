@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
-const AddTask = () => {
+const AddTaskForm = () => {
   return (
     <div>
       <Link href="/add-task">
@@ -15,4 +15,4 @@ const AddTask = () => {
   );
 };
 
-export default AddTask;
+export default AddTaskForm;

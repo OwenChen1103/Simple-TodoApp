@@ -3,8 +3,8 @@
 import { ITask } from "@/types/tasks";
 import { FormEventHandler, useState } from "react";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
-import Modal from "./Modal";
-import { useTodoStore } from "@/stores/todoStore";
+import Modal from "./modal";
+import { useTodoStore } from "@/app/stores/todoStore";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
