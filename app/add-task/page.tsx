@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { addTodo } from "@/api";
+import { useTodoStore } from "@/stores/todoStore";
 import { v4 as uuidv4 } from "uuid";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,12 +19,17 @@ type TaskForm = z.infer<typeof taskSchema>;
 
 const AddTaskPage = () => {
   const router = useRouter();
+  const { addTodo } = useTodoStore();
   const { register, handleSubmit, formState: { errors }, reset } = useForm<TaskForm>({
     resolver: zodResolver(taskSchema),
   });
 
   const onSubmit = async (data: TaskForm) => {
-    await addTodo({ id: uuidv4(), text: data.taskText, description: data.description });
+    await addTodo({
+      id: uuidv4(),
+      text: data.taskText,
+      description: data.description,
+    });
     reset();
     router.push("/");
   };

@@ -1,11 +1,10 @@
-"use client"
+"use client";
 
 import { ITask } from "@/types/tasks";
 import { FormEventHandler, useState } from "react";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import Modal from "./Modal";
-import { useRouter } from "next/navigation";
-import { deleteTodo, editTodo } from "@/api";
+import { useTodoStore } from "@/stores/todoStore";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,25 +15,24 @@ interface TaskProps {
 }
 
 const Task: React.FC<TaskProps> = ({ task }) => {
-  const router = useRouter();
   const [modalOpenEdit, setModalOpenEdit] = useState<boolean>(false);
   const [modalOpenDelete, setModalOpenDelete] = useState<boolean>(false);
   const [taskToEdit, setTaskToEdit] = useState<string>(task.text);
   const [descriptionToEdit, setDescriptionToEdit] = useState<string>(task.description || "");
+  
+  const { updateTodo, deleteTodo } = useTodoStore();
 
   const handleSubmitEditTodo: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    await editTodo({ id: task.id, text: taskToEdit, description: descriptionToEdit });
+    await updateTodo(task.id, { text: taskToEdit, description: descriptionToEdit });
     setTaskToEdit("");
     setDescriptionToEdit("");
     setModalOpenEdit(false);
-    router.refresh();
   };
 
   const handleDeleteTask = async (id: string) => {
     await deleteTodo(id);
     setModalOpenDelete(false);
-    router.refresh();
   };
 
   return (
