@@ -1,0 +1,66 @@
+# Build folders
+bin/
+obj/
+[Bb]uild/
+[Bb]uilds/
+
+# Visual Studio temporary files
+*.user
+*.userosscache
+*.suo
+*.cache
+*.pdb
+*.opendb
+*.VC.db
+*.VC.VC.opendb
+
+# Visual Studio Code settings
+.vscode/
+
+# Visual Studio generated files
+.vs/
+
+# Test results
+TestResults/
+*.TestResult.xml
+
+# Package directories
+packages/
+*.nupkg
+*.snupkg
+
+# .NET Core specific
+project.lock.json
+project.fragment.lock.json
+artifacts/
+*.deps.json
+*.runtimeconfig.json
+*.runtimeconfig.dev.json
+
+# Entity Framework Core Migrations Snapshots
+Migrations/*Designer.cs
+
+# NuGet packages
+*.nupkg
+*.snupkg
+*.nuget.props
+*.nuget.targets
+
+# Logs
+*.log
+
+# Publish output
+publish/
+wwwroot/lib/
+
+# Rider / JetBrains IDE
+.idea/
+*.sln.iml
+
+# Environment / secrets
+*.env
+secrets.json
+
+# Others
+_ReSharper*/
+*.DotSettings.user
