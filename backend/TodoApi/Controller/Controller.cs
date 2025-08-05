@@ -1,56 +1,53 @@
 using Microsoft.AspNetCore.Mvc;
-using TodoApi.Data;
-using TodoApi.Model;
-using Microsoft.EntityFrameworkCore;
+using TodoApi.DTOs;
+using TodoApi.Services;
 
 [Route("api/[controller]")]
 [ApiController]
 public class TodosController : ControllerBase
 {
-    private readonly TodoContext _context;
-    public TodosController(TodoContext context)
+    private readonly ITodoService _todoService;
+
+    public TodosController(ITodoService todoService)
     {
-        _context = context;
+        _todoService = todoService;
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Todo>>> GetTodos()
+    public async Task<ActionResult<IEnumerable<TodoResponseDto>>> GetTodos()
     {
-        return await _context.Todos.ToListAsync();
+        var todos = await _todoService.GetAllTodosAsync();
+        return Ok(todos);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Todo>> GetTodo(int id)
+    public async Task<ActionResult<TodoResponseDto>> GetTodo(int id)
     {
-        var todo = await _context.Todos.FindAsync(id);
+        var todo = await _todoService.GetTodoByIdAsync(id);
         if (todo == null) return NotFound();
-        return todo;
+        return Ok(todo);
     }
 
     [HttpPost]
-    public async Task<ActionResult<Todo>> PostTodo(Todo todo)
+    public async Task<ActionResult<TodoResponseDto>> PostTodo(CreateTodoDto createTodoDto)
     {
-        _context.Todos.Add(todo);
-        await _context.SaveChangesAsync();
+        var todo = await _todoService.CreateTodoAsync(createTodoDto);
         return CreatedAtAction(nameof(GetTodo), new { id = todo.Id }, todo);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutTodo(int id, Todo todo)
+    public async Task<ActionResult<TodoResponseDto>> PutTodo(int id, UpdateTodoDto updateTodoDto)
     {
-        if (id != todo.Id) return BadRequest();
-        _context.Entry(todo).State = EntityState.Modified;
-        await _context.SaveChangesAsync();
-        return NoContent();
+        var todo = await _todoService.UpdateTodoAsync(id, updateTodoDto);
+        if (todo == null) return NotFound();
+        return Ok(todo);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTodo(int id)
     {
-        var todo = await _context.Todos.FindAsync(id);
-        if (todo == null) return NotFound();
-        _context.Todos.Remove(todo);
-        await _context.SaveChangesAsync();
+        var success = await _todoService.DeleteTodoAsync(id);
+        if (!success) return NotFound();
         return NoContent();
     }
 }

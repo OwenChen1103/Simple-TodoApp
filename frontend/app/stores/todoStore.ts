@@ -5,9 +5,9 @@ interface TodoStore {
   todos: ITask[]
   loading: boolean
   fetchTodos: () => Promise<void>
-  addTodo: (todo: ITask) => Promise<void>
-  updateTodo: (id: string, todo: Partial<ITask>) => Promise<void>
-  deleteTodo: (id: string) => Promise<void>
+  addTodo: (todo: Omit<ITask, 'id' | 'createdAt' | 'updatedAt'>) => Promise<void>
+  updateTodo: (id: number, todo: Partial<Omit<ITask, 'id' | 'createdAt' | 'updatedAt'>>) => Promise<void>
+  deleteTodo: (id: number) => Promise<void>
 }
 
 export const useTodoStore = create<TodoStore>((set: any, get: any) => ({
@@ -17,7 +17,7 @@ export const useTodoStore = create<TodoStore>((set: any, get: any) => ({
   fetchTodos: async () => {
     set({ loading: true })
     try {
-      const response = await fetch('http://localhost:3001/tasks')
+      const response = await fetch('http://localhost:5161/api/todos')
       const todos = await response.json()
       set({ todos, loading: false })
     } catch (error) {
@@ -26,9 +26,9 @@ export const useTodoStore = create<TodoStore>((set: any, get: any) => ({
     }
   },
 
-  addTodo: async (todo: ITask) => {
+  addTodo: async (todo) => {
     try {
-      const response = await fetch('http://localhost:3001/tasks', {
+      const response = await fetch('http://localhost:5161/api/todos', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -44,34 +44,35 @@ export const useTodoStore = create<TodoStore>((set: any, get: any) => ({
     }
   },
 
-  updateTodo: async (id: string, updatedTodo: Partial<ITask>) => {
+  updateTodo: async (id, updatedTodo) => {
     try {
-      const response = await fetch(`http://localhost:3001/tasks/${id}`, {
+      const response = await fetch(`http://localhost:5161/api/todos/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(updatedTodo),
       })
-      const updated = await response.json()
-      set((state: TodoStore) => ({
-        todos: state.todos.map((todo: ITask) => 
-          todo.id === id ? updated : todo
-        )
-      }))
+      if (response.ok) {
+        // Refresh the todos list after update
+        const { fetchTodos } = get()
+        await fetchTodos()
+      }
     } catch (error) {
       console.error('Failed to update todo:', error)
     }
   },
 
-  deleteTodo: async (id: string) => {
+  deleteTodo: async (id) => {
     try {
-      await fetch(`http://localhost:3001/tasks/${id}`, {
+      const response = await fetch(`http://localhost:5161/api/todos/${id}`, {
         method: 'DELETE',
       })
-      set((state: TodoStore) => ({
-        todos: state.todos.filter((todo: ITask) => todo.id !== id)
-      }))
+      if (response.ok) {
+        set((state: TodoStore) => ({
+          todos: state.todos.filter((todo: ITask) => todo.id !== id)
+        }))
+      }
     } catch (error) {
       console.error('Failed to delete todo:', error)
     }

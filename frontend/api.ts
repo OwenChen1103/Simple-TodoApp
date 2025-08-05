@@ -1,15 +1,15 @@
 import { ITask } from "./types/tasks";
 
-const baseUrl = "http://localhost:3001";
+const baseUrl = "http://localhost:5161/api/todos";
 
 export const getAllTodos = async (): Promise<ITask[]> => {
-    const response = await fetch(`${baseUrl}/tasks`, {cache: 'no-store'});
+    const response = await fetch(`${baseUrl}`, {cache: 'no-store'});
     const todos = await response.json();
     return todos;
 }
 
-export const addTodo = async (todo: ITask): Promise<ITask> => {
-    const response = await fetch(`${baseUrl}/tasks`,{
+export const addTodo = async (todo: Omit<ITask, 'id' | 'createdAt' | 'updatedAt'>): Promise<ITask> => {
+    const response = await fetch(`${baseUrl}`,{
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -20,8 +20,8 @@ export const addTodo = async (todo: ITask): Promise<ITask> => {
     return newTodo;
 }
 
-export const editTodo = async (todo: ITask): Promise<ITask> => {
-    const response = await fetch(`${baseUrl}/tasks/${todo.id}`, {
+export const editTodo = async (id: number, todo: Partial<Omit<ITask, 'id' | 'createdAt' | 'updatedAt'>>): Promise<ITask> => {
+    const response = await fetch(`${baseUrl}/${id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -32,8 +32,8 @@ export const editTodo = async (todo: ITask): Promise<ITask> => {
     return updatedTodo;
 }
 
-export const deleteTodo = async (id: string): Promise<void> => {
-    await fetch(`${baseUrl}/tasks/${id}`, {
+export const deleteTodo = async (id: number): Promise<void> => {
+    await fetch(`${baseUrl}/${id}`, {
         method: "DELETE",
     });
 }
