@@ -17,20 +17,20 @@ interface TaskProps {
 const Task: React.FC<TaskProps> = ({ task }) => {
   const [modalOpenEdit, setModalOpenEdit] = useState<boolean>(false);
   const [modalOpenDelete, setModalOpenDelete] = useState<boolean>(false);
-  const [taskToEdit, setTaskToEdit] = useState<string>(task.text);
+  const [taskToEdit, setTaskToEdit] = useState<string>(task.title);
   const [descriptionToEdit, setDescriptionToEdit] = useState<string>(task.description || "");
   
   const { updateTodo, deleteTodo } = useTodoStore();
 
   const handleSubmitEditTodo: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    await updateTodo(task.id, { text: taskToEdit, description: descriptionToEdit });
+    await updateTodo(task.id, { title: taskToEdit, description: descriptionToEdit });
     setTaskToEdit("");
     setDescriptionToEdit("");
     setModalOpenEdit(false);
   };
 
-  const handleDeleteTask = async (id: string) => {
+  const handleDeleteTask = async (id: number) => {
     await deleteTodo(id);
     setModalOpenDelete(false);
   };
@@ -38,7 +38,7 @@ const Task: React.FC<TaskProps> = ({ task }) => {
   return (
     <TableRow key={task.id}>
       <TableCell className="w-full">
-        <div className="font-medium">{task.text}</div>
+        <div className="font-medium">{task.title}</div>
         {task.description && (
           <div className="text-sm text-muted-foreground mt-1">{task.description}</div>
         )}
@@ -50,13 +50,13 @@ const Task: React.FC<TaskProps> = ({ task }) => {
             <h3 className="text-lg font-bold">Edit task</h3>
             <div className="flex flex-col gap-4 mt-4">
               <Input
-                value={taskToEdit}
+                value={taskToEdit || ""}
                 onChange={(e) => setTaskToEdit(e.target.value)}
                 placeholder="Task title"
                 className="w-full"
               />
               <Textarea
-                value={descriptionToEdit}
+                value={descriptionToEdit || ""}
                 onChange={(e) => setDescriptionToEdit(e.target.value)}
                 placeholder="Description"
                 className="w-full"

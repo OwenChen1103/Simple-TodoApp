@@ -5,13 +5,12 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useTodoStore } from "@/app/stores/todoStore";
-import { v4 as uuidv4 } from "uuid";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 const taskSchema = z.object({
-  taskText: z.string().min(1, "Task cannot be empty"),
+  title: z.string().min(1, "Title cannot be empty"),
   description: z.string().min(1, "Description cannot be empty"),
 });
 
@@ -26,8 +25,7 @@ const AddTaskPage = () => {
 
   const onSubmit = async (data: TaskForm) => {
     await addTodo({
-      id: uuidv4(),
-      text: data.taskText,
+      title: data.title,
       description: data.description,
     });
     reset();
@@ -40,12 +38,12 @@ const AddTaskPage = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Input
           type="text"
-          placeholder="Type here"
-          {...register("taskText")}
+          placeholder="Task title"
+          {...register("title")}
           className="mb-2"
         />
-        {errors.taskText && (
-          <div className="text-red-500 text-sm mb-2">{errors.taskText.message}</div>
+        {errors.title && (
+          <div className="text-red-500 text-sm mb-2">{errors.title.message}</div>
         )}
         <Textarea
           placeholder="Description"
